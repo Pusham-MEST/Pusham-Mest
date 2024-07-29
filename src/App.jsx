@@ -4,6 +4,7 @@ import Home from "./home"
 import Login from "./pages/login"
 import SignUp from "./pages/signup"
 import Menu from "./pages/menu"
+import AlertPage from "./pages/alertPage"
 
 
 function App() {
@@ -27,6 +28,10 @@ function App() {
         {
           path:"menu",
           element: <Menu />,
+        },
+        {
+          path:"alert",
+          element: <AlertPage />,
         },
       ]
     }
