@@ -21,7 +21,7 @@ const Navbar = () => {
                 className="hidden dark:block"
               />
             </a>
-          </div>
+          </div>A
           <div className="flex w-full items-center justify-between px-4">
             <div>
               <button
