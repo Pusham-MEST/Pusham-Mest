@@ -5,6 +5,7 @@ import Login from "./pages/login"
 import SignUp from "./pages/signup"
 import Menu from "./pages/menu"
 import AlertPage from "./pages/alertPage"
+import SignUpAlerts from "./home/components/signUpAlert"
 
 
 function App() {
@@ -32,6 +33,10 @@ function App() {
         {
           path:"alert",
           element: <AlertPage />,
+        },
+        {
+          path:"SignUpAlerts",
+          element: <SignUpAlerts />,
         },
       ]
     }
