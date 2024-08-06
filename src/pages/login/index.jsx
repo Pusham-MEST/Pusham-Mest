@@ -1,10 +1,15 @@
-
 import React, { useState } from 'react';
 
-const Login = () => {
+const SignUp = () => {
   const [formData, setFormData] = useState({
+    firstName: '',
+    middleName: '',
+    lastName: '',
+    phoneNumber: '',
     email: '',
     password: '',
+    confirmPassword: '',
+    neighborhood: '',
   });
 
   const [error, setError] = useState('');
@@ -19,20 +24,35 @@ const Login = () => {
     setError('');
     setSuccess('');
 
+    if (formData.password !== formData.confirmPassword) {
+      setError('Passwords do not match');
+      return;
+    }
+
     try {
       // Mock API call
-      const response = await new Promise((resolve) =>
-        setTimeout(() => resolve({ ok: true }), 1000)
-      );
+      const response = await fetch('/api/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+
+      const result = await response.json();
 
       if (response.ok) {
-        setSuccess('Login successful!');
+        setSuccess(result.message);
         setFormData({
+          firstName: '',
+          middleName: '',
+          lastName: '',
+          phoneNumber: '',
           email: '',
           password: '',
+          confirmPassword: '',
+          neighborhood: '',
         });
       } else {
-        setError('Login failed');
+        setError(result.error);
       }
     } catch (error) {
       setError('An error occurred. Please try again later.');
@@ -42,37 +62,17 @@ const Login = () => {
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100 p-5">
       <div className="w-full max-w-md p-8 bg-white border border-gray-300 rounded-md shadow-md">
-        <h2 className="text-2xl font-bold mb-5 text-center">Login</h2>
+        <h2 className="text-2xl font-bold mb-5 text-center">Sign Up</h2>
         {error && <div className="mb-4 text-red-500">{error}</div>}
         {success && <div className="mb-4 text-green-500">{success}</div>}
         <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label className="block text-gray-700">Email</label>
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              className="w-full p-2 border border-gray-300 rounded mt-1"
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700">Password</label>
-            <input
-              type="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              className="w-full p-2 border border-gray-300 rounded mt-1"
-              required
-            />
-          </div>
+        
+      
           <button
             type="submit"
             className="w-full bg-blue-500 text-white p-2 rounded mt-2 hover:bg-blue-600"
           >
-            Login
+            Sign Up
           </button>
         </form>
       </div>
@@ -80,4 +80,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default SignUp;
