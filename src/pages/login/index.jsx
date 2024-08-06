@@ -1,9 +1,8 @@
-
 import React, { useState } from 'react';
 
 const Login = () => {
   const [formData, setFormData] = useState({
-    email: '',
+    username: '',
     password: '',
   });
 
@@ -21,22 +20,31 @@ const Login = () => {
 
     try {
       // Mock API call
-      const response = await new Promise((resolve) =>
-        setTimeout(() => resolve({ ok: true }), 1000)
-      );
+      const response = await fetch('/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+
+      const result = await response.json();
 
       if (response.ok) {
-        setSuccess('Login successful!');
+        setSuccess(result.message);
         setFormData({
-          email: '',
+          username: '',
           password: '',
         });
       } else {
-        setError('Login failed');
+        setError(result.error);
       }
     } catch (error) {
       setError('An error occurred. Please try again later.');
     }
+  };
+
+  const handleForgotPassword = () => {
+    // Handle forgot password logic
+    alert('Forgot Password clicked');
   };
 
   return (
@@ -47,11 +55,11 @@ const Login = () => {
         {success && <div className="mb-4 text-green-500">{success}</div>}
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label className="block text-gray-700">Email</label>
+            <label className="block text-gray-700">Username</label>
             <input
-              type="email"
-              name="email"
-              value={formData.email}
+              type="text"
+              name="username"
+              value={formData.username}
               onChange={handleChange}
               className="w-full p-2 border border-gray-300 rounded mt-1"
               required
@@ -73,6 +81,13 @@ const Login = () => {
             className="w-full bg-blue-500 text-white p-2 rounded mt-2 hover:bg-blue-600"
           >
             Login
+          </button>
+          <button
+            type="button"
+            onClick={handleForgotPassword}
+            className="w-full mt-2 text-blue-500 hover:underline"
+          >
+            Forgot Password?
           </button>
         </form>
       </div>
