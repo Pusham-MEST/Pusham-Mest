@@ -66,8 +66,15 @@ const SignUp = () => {
         {error && <div className="mb-4 text-red-500">{error}</div>}
         {success && <div className="mb-4 text-green-500">{success}</div>}
         <form onSubmit={handleSubmit}>
-          {/* Form fields here */}
-          {/* ... */}
+          <label className="block mb-2 text-sm font-medium text-gray-700">First Name</label>
+          <input
+            type="text"
+            name="firstName"
+            value={formData.firstName}
+            onChange={handleChange}
+            className="w-full p-2 border border-gray-300 rounded mb-4"
+          />
+          {/* Add other fields similarly */}
           <button
             type="submit"
             className="w-full bg-blue-500 text-white p-2 rounded mt-2 hover:bg-blue-600"
