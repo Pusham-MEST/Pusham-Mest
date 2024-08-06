@@ -63,11 +63,11 @@ const AlertPage = () => {
           </div>
         </div>
         <section className="ezy__service9 light py-14 md:py-24 bg-white dark:bg-[#0b1727] text-zinc-900 dark:text-white relative z-[1] overflow-hidden">
-          <div className="container px-4 mx-auto">
+          <div className="container px-4 mx-auto ml-[10px]">
             <div
               className="absolute top-16 right-0 bottom-16 left-1/2 lg:left-[60%] rounded-l-[30px] bg-[#1271B4] bg-opacity-100 w-[100vw] -z-[1]"
             ></div>
-            <div className="w-full max-w-xl mb-12">
+            <div className="w-full max-w-xl mb-12 mt-4">
               <h2 className="text-3xl leading-none md:text-[45px] font-bold mb-4">GET OUTAGE ALERTS</h2>
               <p className="text-lg opacity-80 mb-6">
                 Sign up to receive alerts via text or email on when your power will go out. We’ll notify you when we detect an outage on your property, have restoration estimates and updates, or have restored power to your address.
