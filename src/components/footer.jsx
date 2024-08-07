@@ -1,8 +1,22 @@
-import { logo } from "../assets"
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { logo } from '../assets';
 
 const Footer = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // Add actual login check logic here
+  const navigate = useNavigate();
+
+  const handleButtonClick = () => {
+    if (isLoggedIn) {
+      navigate('/alertPage'); // Change to the actual alert page path
+    } else {
+      navigate('/signUp'); // Change to the actual sign-up page path
+    }
+  };
+
   return (
     <div>
+
       <footer className="footer text-base-content p-10 bg-[#1271B4]">
         <nav>
           <h6 className="footer-title">Services</h6>
@@ -24,6 +38,14 @@ const Footer = () => {
           <a className="link link-hover">Privacy policy</a>
           <a className="link link-hover">Cookie policy</a>
         </nav>
+        <div className="flex justify-end py-10">
+          <button
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full flex flex-col items-center"
+            onClick={handleButtonClick}>
+            {/* <span className="text-2xl">+</span> */}
+            <span>Add Area</span>
+          </button>
+        </div>
       </footer>
       <footer className="footer bg-base-200 text-base-content border-base-300 border-t px-10 py-4">
         <aside className="grid-flow-col items-center w-[100px]">
@@ -68,7 +90,7 @@ const Footer = () => {
         </nav>
       </footer>
     </div>
-  )
-}
+  );
+};
 
-export default Footer
+export default Footer;

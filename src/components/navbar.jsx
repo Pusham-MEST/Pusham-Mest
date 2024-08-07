@@ -1,8 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { logo } from '../assets';
 
 const Navbar = () => {
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+    // This is just a placeholder. Replace it with actual authentication logic.
+    // Example: setIsLoggedIn(auth.isAuthenticated());
+
     return (
         <div>
             <div className="navbar bg-base-100">
@@ -26,18 +31,23 @@ const Navbar = () => {
                         <ul
                             tabIndex={0}
                             className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
-                            <li>
-                                <Link to="/signUp" className="justify-between">
-                                    Sign Up
-                                    <span className="badge">New</span>
-                                </Link>
-                            </li>
-                            <li><Link to="/login">Login</Link></li>
-                            <li><Link to="/">Logout</Link></li>
+                            {!isLoggedIn && (
+                                <>
+                                    <li>
+                                        <Link to="/signUp" className="justify-between">
+                                            Sign Up
+                                            <span className="badge">New</span>
+                                        </Link>
+                                    </li>
+                                    <li><Link to="/login">Login</Link></li>
+                                </>
+                            )}
+                            {isLoggedIn && (
+                                <li><Link to="/logout">Logout</Link></li>
+                            )}
                         </ul>
                     </div>
                 </div>
-
             </div>
         </div>
     );
