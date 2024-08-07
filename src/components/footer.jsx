@@ -36,7 +36,13 @@ const Footer = () => {
           <h6 className="footer-title">Legal</h6>
           <a className="link link-hover">Terms of use</a>
           <a className="link link-hover">Privacy policy</a>
-          <a className="link link-hover">Cookie policy</a>
+          <a
+            href="https://www.eneocameroon.cm/index.php/fr/guide-du-client-eneo/guide-du-client-eneo-sommaire#gsc.tab=0"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="link link-hover">
+            Cookie policy
+          </a>
         </nav>
         <div className="flex justify-end py-10">
           <button
