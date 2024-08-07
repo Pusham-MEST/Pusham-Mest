@@ -30,17 +30,13 @@ const SignUp = () => {
     }
 
     try {
-      // Mock API call
-      const response = await fetch('/api/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      });
-
-      const result = await response.json();
+      
+      const response = await new Promise((resolve) =>
+        setTimeout(() => resolve({ ok: true }), 1000)
+      );
 
       if (response.ok) {
-        setSuccess(result.message);
+        setSuccess('Registration successful!');
         setFormData({
           firstName: '',
           middleName: '',
@@ -52,7 +48,7 @@ const SignUp = () => {
           neighborhood: '',
         });
       } else {
-        setError(result.error);
+        setError('Registration failed');
       }
     } catch (error) {
       setError('An error occurred. Please try again later.');
@@ -66,8 +62,92 @@ const SignUp = () => {
         {error && <div className="mb-4 text-red-500">{error}</div>}
         {success && <div className="mb-4 text-green-500">{success}</div>}
         <form onSubmit={handleSubmit}>
-          {/* Form fields here */}
-          {/* ... */}
+          <div className="mb-4">
+            <label className="block text-gray-700">First Name</label>
+            <input
+              type="text"
+              name="firstName"
+              value={formData.firstName}
+              onChange={handleChange}
+              className="w-full p-2 border border-gray-300 rounded mt-1"
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Middle Name</label>
+            <input
+              type="text"
+              name="middleName"
+              value={formData.middleName}
+              onChange={handleChange}
+              className="w-full p-2 border border-gray-300 rounded mt-1"
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Last Name</label>
+            <input
+              type="text"
+              name="lastName"
+              value={formData.lastName}
+              onChange={handleChange}
+              className="w-full p-2 border border-gray-300 rounded mt-1"
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Phone Number</label>
+            <input
+              type="tel"
+              name="phoneNumber"
+              value={formData.phoneNumber}
+              onChange={handleChange}
+              className="w-full p-2 border border-gray-300 rounded mt-1"
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Email</label>
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              className="w-full p-2 border border-gray-300 rounded mt-1"
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Password</label>
+            <input
+              type="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              className="w-full p-2 border border-gray-300 rounded mt-1"
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Confirm Password</label>
+            <input
+              type="password"
+              name="confirmPassword"
+              value={formData.confirmPassword}
+              onChange={handleChange}
+              className="w-full p-2 border border-gray-300 rounded mt-1"
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Neighborhood</label>
+            <input
+              type="text"
+              name="neighborhood"
+              value={formData.neighborhood}
+              onChange={handleChange}
+              className="w-full p-2 border border-gray-300 rounded mt-1"
+            />
+          </div>
           <button
             type="submit"
             className="w-full bg-blue-500 text-white p-2 rounded mt-2 hover:bg-blue-600"
