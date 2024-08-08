@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { registerUser } from './authServices';
 
 const SignUp = () => {
   const [formData, setFormData] = useState({
@@ -30,12 +31,9 @@ const SignUp = () => {
     }
 
     try {
-      
-      const response = await new Promise((resolve) =>
-        setTimeout(() => resolve({ ok: true }), 1000)
-      );
+      const response = await registerUser(formData);
 
-      if (response.ok) {
+      if (response.status === 201) { 
         setSuccess('Registration successful!');
         setFormData({
           firstName: '',
@@ -51,7 +49,7 @@ const SignUp = () => {
         setError('Registration failed');
       }
     } catch (error) {
-      setError('An error occurred. Please try again later.');
+      setError(error.response?.data?.message || 'An error occurred. Please try again later.');
     }
   };
 
