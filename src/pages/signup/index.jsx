@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { registerUser } from './authServices';
 
 const SignUp = () => {
   const [formData, setFormData] = useState({
@@ -9,7 +10,7 @@ const SignUp = () => {
     email: '',
     password: '',
     confirmPassword: '',
-    neighborhood: '',
+    address: '', // Updated field
   });
 
   const [error, setError] = useState('');
@@ -30,12 +31,9 @@ const SignUp = () => {
     }
 
     try {
-      
-      const response = await new Promise((resolve) =>
-        setTimeout(() => resolve({ ok: true }), 1000)
-      );
+      const response = await registerUser(formData);
 
-      if (response.ok) {
+      if (response.status === 201) { 
         setSuccess('Registration successful!');
         setFormData({
           firstName: '',
@@ -45,13 +43,13 @@ const SignUp = () => {
           email: '',
           password: '',
           confirmPassword: '',
-          neighborhood: '',
+          address: '', 
         });
       } else {
         setError('Registration failed');
       }
     } catch (error) {
-      setError('An error occurred. Please try again later.');
+      setError(error.response?.data?.message || 'An error occurred. Please try again later.');
     }
   };
 
@@ -139,11 +137,11 @@ const SignUp = () => {
             />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700">Neighborhood</label>
+            <label className="block text-gray-700">Address</label> 
             <input
               type="text"
-              name="neighborhood"
-              value={formData.neighborhood}
+              name="address"
+              value={formData.address}
               onChange={handleChange}
               className="w-full p-2 border border-gray-300 rounded mt-1"
             />
