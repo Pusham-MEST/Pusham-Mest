@@ -10,7 +10,7 @@ const SignUp = () => {
     email: '',
     password: '',
     confirmPassword: '',
-    neighborhood: '',
+    address: '', // Updated field
   });
 
   const [error, setError] = useState('');
@@ -43,7 +43,7 @@ const SignUp = () => {
           email: '',
           password: '',
           confirmPassword: '',
-          neighborhood: '',
+          address: '', 
         });
       } else {
         setError('Registration failed');
@@ -137,11 +137,11 @@ const SignUp = () => {
             />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700">Neighborhood</label>
+            <label className="block text-gray-700">Address</label> 
             <input
               type="text"
-              name="neighborhood"
-              value={formData.neighborhood}
+              name="address"
+              value={formData.address}
               onChange={handleChange}
               className="w-full p-2 border border-gray-300 rounded mt-1"
             />
