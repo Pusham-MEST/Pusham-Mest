@@ -19,19 +19,25 @@ const Login = () => {
     setSuccess('');
 
     try {
-      
-      const response = await new Promise((resolve) =>
-        setTimeout(() => resolve({ ok: true }), 1000)
-      );
+      const response = await fetch('https://api/v1/users/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+      const data = await response.json();
 
       if (response.ok) {
+        
         setSuccess('Login successful!');
         setFormData({
           username: '',
           password: '',
         });
+        
       } else {
-        setError('Login failed');
+        setError(data.message || 'Login failed');
       }
     } catch (error) {
       setError('An error occurred. Please try again later.');
@@ -39,8 +45,9 @@ const Login = () => {
   };
 
   const handleForgotPassword = () => {
-    
     alert('Forgot Password clicked');
+    
+
   };
 
   return (
