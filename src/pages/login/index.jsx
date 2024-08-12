@@ -73,7 +73,7 @@ const LogIn = () => {
               {isSubmitting ? <Loader /> : "login"}
             </button>
             <p className="text-center text-gray-600 mt-4">
-              Don't have an account? <Link to="/signup" className="text-blue-500 font-semibold">Login</Link>.
+              Don't have an account? <Link to="/signup" className="text-blue-500 font-semibold">Sign Up</Link>.
             </p>
           </form>
         </div>
