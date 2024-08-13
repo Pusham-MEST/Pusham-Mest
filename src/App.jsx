@@ -6,6 +6,7 @@ import SignUp from "./pages/signup"
 import Menu from "./pages/menu"
 import AlertPage from "./pages/alertPage"
 import SignUpAlerts from "./home/components/signUpAlert"
+import AdminDashboard from "./home/components/adminDashboard"
 
 
 function App() {
@@ -37,6 +38,10 @@ function App() {
         {
           path:"SignUpAlerts",
           element: <SignUpAlerts />,
+        },
+        {
+          path:"admin",
+          element: <AdminDashboard />,
         },
       ]
     }
