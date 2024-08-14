@@ -1,85 +1,30 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
-import { apiCheckUsernameExists, apiSignUp } from "../../services/auth";
+import { apiSignUp } from "../../services/auth";
 import { toast } from "react-toastify";
-import { debounce } from "lodash";
-import Loader from '../../components/Loader'
+import Loader from "../../components/Loader";
 
 const SignUp = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [usernameAvailable, setUsernameAvailable] = useState(false);
-  const [usernameNotAvailable, setUsernameNotAvailable] = useState(false);
-  const [isUsernameLoading, setIsUsernameLoading] = useState(false);
   const navigate = useNavigate();
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm();
-
-  const checkUserName = async (userName) => {
-    console.log("I've been called");
-    setIsUsernameLoading(true);
-    try {
-      const res = await apiCheckUsernameExists(userName);
-      console.log(res.data);
-      const user = res.data.user;
-      if (user) {
-        setUsernameNotAvailable(true);
-        setUsernameAvailable(false);
-      } else {
-        setUsernameAvailable(true);
-        setUsernameNotAvailable(false);
-      }
-    } catch (error) {
-      console.log(error);
-      toast.error("An error occurred");
-    } finally {
-      setIsUsernameLoading(false);
-    }
-  };
-
-  const userNameWatch = watch("userName");
-  console.log(userNameWatch);
-
-  useEffect(() => {
-    const debouncedSearch = debounce(async () => {
-      if (userNameWatch) {
-        await checkUserName(userNameWatch);
-      }
-    }, 500);
-    debouncedSearch();
-    return () => {
-      debouncedSearch.cancel();
-    };
-  }, [userNameWatch]);
+  const { register, handleSubmit, watch, formState: { errors } } = useForm();
 
   const onSubmit = async (data) => {
-    console.log(data);
     setIsSubmitting(true);
-    let payload = {
-      userName: data.userName, // Added username to payload
-      firstName: data.firstName,
-      middleName: data.middleName,
-      lastName: data.lastName,
-      phoneNumber: data.phoneNumber,
-      email: data.email,
-      password: data.password,
-      confirmPassword: data.confirmPassword,
-      address: data.address,
-    };
+    const { firstName, lastName, phoneNumber, email, password, confirmPassword, address, role } = data;
 
     try {
-      const res = await apiSignUp(payload);
-      console.log(res.data);
+      const res = await apiSignUp({ firstName, lastName, phoneNumber, email, password, confirmPassword, address, role });
       toast.success("Sign Up Successful");
-      setTimeout(() => {
-        navigate("/login");
-      }, 5000);
+
+      // Redirect based on role
+      if (role === 'admin') {
+        navigate("/admin-dashboard");
+      } else {
+        navigate("/alert");
+      }
     } catch (error) {
-      console.log(error);
       toast.error("An error occurred");
     } finally {
       setIsSubmitting(false);
@@ -87,146 +32,129 @@ const SignUp = () => {
   };
 
   return (
-    <div className="flex items-center justify-center rounded-xl">
-      <div className="flex flex-row shadow-lg m-48">
-        <div className="flex justify-center items-center h-screen bg-[#337eff]">
-          <div className="text-center text-white font-mono text-lg m-20">
-            <h1 className="font-extrabold text-3xl">Welcome!</h1>
-            <p>To keep connected with us please login with your info!</p>
-            <Link to="/login" className="underline">Sign In Here</Link>
-          </div>
-        </div>
-
-        <div>
-          <form
-            className="[h-500px] w-[500px] flex flex-row place-content-center font-serif"
-            onSubmit={handleSubmit(onSubmit)}
-          >
-            <div>
-              <div className="text-center text-3xl p-3 pt-10">
-                <h1>Sign Up</h1>
-              </div>
-              <label htmlFor="userName" className="block text-black mb-1 ml-4">
-                Username
-              </label>
-              <input
-                type="text"
-                id="userName"
-                placeholder="Enter your username"
-                className="bg-slate-300 h-10 w-full px-2 py-1 border-gray-400 border-2 rounded-lg"
-                {...register("userName", { required: "Username is required" })}
-              />
-              {errors.userName && <p className="text-red-500">{errors.userName.message}</p>}
-              <div className="flex items-start">
-                <div className="flex items-center h-5">
-                  {isUsernameLoading && <Loader />}
-                </div>
-                <div className="ml-3 text-sm">
-                  {usernameAvailable && <p className="text-green-500">Username is available!</p>}
-                  {usernameNotAvailable && <p className="text-red-500">Username is already taken!</p>}
-                </div>
-              </div>
-              <label htmlFor="firstName" className="block text-black mb-1 ml-4">
-                First name
-              </label>
+    <div className="flex items-center justify-center h-screen bg-gradient-to-r from-pink-200 via-yellow-200 to-teal-200">
+      <div className="flex flex-col items-center bg-white p-4 rounded-xl shadow-lg max-w-md w-full">
+        <h1 className="text-2xl font-bold text-teal-600 mb-2">Sign Up</h1>
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-2 w-full">
+          {/* Combined Name Field */}
+          <div className="flex space-x-2 mb-2">
+            <div className="flex-1">
+              <label htmlFor="firstName" className="block text-gray-700 text-xs mb-1">First Name</label>
               <input
                 type="text"
                 id="firstName"
-                placeholder="Enter your first name"
-                className="bg-slate-300 h-10 w-full px-2 py-1 border-gray-400 border-[2px] rounded-md"
+                placeholder="First Name"
+                className="bg-gray-100 px-2 border border-gray-300 rounded-md h-8 w-full text-xs"
                 {...register("firstName", { required: "First name is required" })}
               />
-              {errors.firstName && <p className="text-red-500">{errors.firstName.message}</p>}
-              <label htmlFor="middleName" className="block text-black mb-1 ml-4">
-                Middle name
-              </label>
-              <input
-                type="text"
-                id="middleName"
-                placeholder="Enter your middle name"
-                className="bg-slate-300 h-10 w-full px-2 py-1 border-gray-400 border-2 rounded-lg"
-                {...register("middleName")}
-              />
-              <label htmlFor="lastName" className="block text-black mb-1 ml-4">
-                Last name
-              </label>
+              {errors.firstName && <p className="text-red-500 text-xs mt-1">{errors.firstName.message}</p>}
+            </div>
+            <div className="flex-1">
+              <label htmlFor="lastName" className="block text-gray-700 text-xs mb-1">Last Name</label>
               <input
                 type="text"
                 id="lastName"
-                placeholder="Enter your last name"
-                className="bg-slate-300 h-10 w-full px-2 py-1 border-gray-400 border-2 rounded-lg"
+                placeholder="Last Name"
+                className="bg-gray-100 px-2 border border-gray-300 rounded-md h-8 w-full text-xs"
                 {...register("lastName", { required: "Last name is required" })}
               />
-              {errors.lastName && <p className="text-red-500">{errors.lastName.message}</p>}
-              <label htmlFor="phoneNumber" className="block text-black mb-1 ml-4">
-                Phone number
-              </label>
+              {errors.lastName && <p className="text-red-500 text-xs mt-1">{errors.lastName.message}</p>}
+            </div>
+          </div>
+          
+          {/* Phone and Email Field */}
+          <div className="flex space-x-2 mb-2">
+            <div className="flex-1">
+              <label htmlFor="phoneNumber" className="block text-gray-700 text-xs mb-1">Phone</label>
               <input
                 type="text"
                 id="phoneNumber"
-                placeholder="Enter your phone number"
-                className="bg-slate-300 h-10 w-full px-2 py-1 border-gray-400 border-2 rounded-lg"
+                placeholder="Phone Number"
+                className="bg-gray-100 px-2 border border-gray-300 rounded-md h-8 w-full text-xs"
                 {...register("phoneNumber", { required: "Phone number is required" })}
               />
-              {errors.phoneNumber && <p className="text-red-500">{errors.phoneNumber.message}</p>}
-              <label htmlFor="email" className="block text-black mb-1 ml-4">
-                Email
-              </label>
+              {errors.phoneNumber && <p className="text-red-500 text-xs mt-1">{errors.phoneNumber.message}</p>}
+            </div>
+            <div className="flex-1">
+              <label htmlFor="email" className="block text-gray-700 text-xs mb-1">Email</label>
               <input
-                type="text"
+                type="email"
                 id="email"
-                placeholder="Enter your email"
-                className="bg-slate-300 h-10 w-full px-2 py-1 border-gray-400 border-2 rounded-lg"
+                placeholder="Email"
+                className="bg-gray-100 px-2 border border-gray-300 rounded-md h-8 w-full text-xs"
                 {...register("email", { required: "Email is required" })}
               />
-              {errors.email && <p className="text-red-500">{errors.email.message}</p>}
-              <label htmlFor="password" className="block text-black mb-1 ml-4">
-                Password
-              </label>
-              <input
-                type="password"
-                id="password"
-                placeholder="Enter your password"
-                className="bg-slate-300 h-10 w-full px-2 py-1 border-gray-400 border-2 rounded-lg"
-                {...register("password", { required: "Password is required", minLength: 8 })}
-              />
-              {errors.password && <p className="text-red-500">{errors.password.message}</p>}
-              <label htmlFor="confirmPassword" className="block text-black mb-1 ml-4">
-                Confirm Password
-              </label>
-              <input
-                type="password"
-                id="confirmPassword"
-                placeholder="Confirm your password"
-                className="bg-slate-300 h-10 w-full px-2 py-1 border-gray-400 border-2 rounded-lg"
-                {...register("confirmPassword", {
-                  required: "Confirm password is required",
-                  validate: value =>
-                    value === watch('password') || "Passwords do not match",
-                })}
-              />
-              {errors.confirmPassword && <p className="text-red-500">{errors.confirmPassword.message}</p>}
-              <label htmlFor="address" className="block text-black mb-1 ml-4">
-                Address
-              </label>
+              {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>}
+            </div>
+          </div>
+          
+          {/* Password Fields */}
+          <div className="mb-2">
+            <label htmlFor="password" className="block text-gray-700 text-xs mb-1">Password</label>
+            <input
+              type="password"
+              id="password"
+              placeholder="Password"
+              className="bg-gray-100 px-2 border border-gray-300 rounded-md h-8 w-full text-xs"
+              {...register("password", { required: "Password is required", minLength: 8 })}
+            />
+            {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password.message}</p>}
+          </div>
+          <div className="mb-2">
+            <label htmlFor="confirmPassword" className="block text-gray-700 text-xs mb-1">Confirm Password</label>
+            <input
+              type="password"
+              id="confirmPassword"
+              placeholder="Confirm Password"
+              className="bg-gray-100 px-2 border border-gray-300 rounded-md h-8 w-full text-xs"
+              {...register("confirmPassword", {
+                required: "Confirm password is required",
+                validate: value => value === watch('password') || "Passwords do not match",
+              })}
+            />
+            {errors.confirmPassword && <p className="text-red-500 text-xs mt-1">{errors.confirmPassword.message}</p>}
+          </div>
+          
+          {/* Address and Role Field */}
+          <div className="flex flex-col space-y-2 mb-2">
+            <div>
+              <label htmlFor="address" className="block text-gray-700 text-xs mb-1">Address</label>
               <input
                 type="text"
                 id="address"
-                placeholder="Enter your address"
-                className="bg-slate-300 h-10 w-full px-2 py-1 border-gray-400 border-2 rounded-lg"
+                placeholder="Address"
+                className="bg-gray-100 px-2 border border-gray-300 rounded-md h-8 w-full text-xs"
                 {...register("address", { required: "Address is required" })}
               />
-              {errors.address && <p className="text-red-500">{errors.address.message}</p>}
-              <button
-                type="submit"
-                className="w-full bg-[#7e7e7e] text-white h-10 rounded-lg mt-3"
-                disabled={isSubmitting}
-              >
-                {isSubmitting ? "Submitting..." : "Sign Up"}
-              </button>
+              {errors.address && <p className="text-red-500 text-xs mt-1">{errors.address.message}</p>}
             </div>
-          </form>
-        </div>
+            <div>
+              <label htmlFor="role" className="block text-gray-700 text-xs mb-1">Role</label>
+              <select
+                id="role"
+                className="bg-gray-100 px-2 border border-gray-300 rounded-md h-8 w-full text-xs"
+                {...register("role", { required: "Role is required" })}
+              >
+                <option value="">Select Role</option>
+                <option value="user">User</option>
+                <option value="admin">Admin</option>
+              </select>
+              {errors.role && <p className="text-red-500 text-xs mt-1">{errors.role.message}</p>}
+            </div>
+          </div>
+          
+          <button
+            type="submit"
+            className="bg-blue-500 text-white h-10 rounded-md hover:bg-blue-600 transition duration-300 w-full"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? <Loader /> : "Sign Up"}
+          </button>
+          <p className="text-center text-gray-600 text-xs mt-2">
+            Already have an account?{" "}
+            <Link to="/login" className="text-blue-500 hover:underline">Login</Link>
+          </p>
+        </form>
       </div>
     </div>
   );

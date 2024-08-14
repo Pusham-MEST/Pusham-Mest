@@ -1,16 +1,21 @@
 import { apiClient } from "./Config";
 
-export const apiSignUp= async(payload) => {
-    return apiClient.post("/auth/signup",payload);
-};
-export const apiLogin =async (payload) => {
-    return apiClient.post("/auth/token/login",payload)
+// Sign up API call
+export const apiSignUp = async (payload) => {
+    return apiClient.post("/auth/signup", payload);
 };
 
+// Login API call
+export const apiLogin = async (payload) => {
+    return apiClient.post("/auth/token/login", payload);
+};
+
+// Check if username exists
 export const apiCheckUsernameExists = async (userName) => {
-    return apiClient.get(`/auth/${userName}`,userName);
-}
+    return apiClient.get(`/auth/username-check/${userName}`);
+};
 
-export const apiGetUserProfile =async (userProfile) => {
-    return apiClient.get("/users/userProfile")
-}
+// Get user profile
+export const apiGetUserProfile = async (userId) => {
+    return apiClient.get(`/users/userProfile/${userId}`);
+};
