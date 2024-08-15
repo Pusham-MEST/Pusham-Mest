@@ -5,9 +5,6 @@ import { logo } from '../assets';
 const Navbar = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-    // This is just a placeholder. Replace it with actual authentication logic.
-    // Example: setIsLoggedIn(auth.isAuthenticated());
-
     return (
         <div>
             <div className="navbar bg-base-100">
@@ -31,7 +28,12 @@ const Navbar = () => {
                         <ul
                             tabIndex={0}
                             className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
-                            {!isLoggedIn && (
+                            {isLoggedIn ? (
+                                <>
+                                    <li><Link to="/edit-profile">Edit Profile</Link></li>
+                                    <li><Link to="/logout">Logout</Link></li>
+                                </>
+                            ) : (
                                 <>
                                     <li>
                                         <Link to="/signUp" className="justify-between">
@@ -41,9 +43,6 @@ const Navbar = () => {
                                     </li>
                                     <li><Link to="/login">Login</Link></li>
                                 </>
-                            )}
-                            {isLoggedIn && (
-                                <li><Link to="/logout">Logout</Link></li>
                             )}
                         </ul>
                     </div>
