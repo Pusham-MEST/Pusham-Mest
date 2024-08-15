@@ -24,7 +24,7 @@ const LogIn = () => {
 
       setTimeout(() => {
         navigate("/dashboard");
-      }, 5000);
+      }, 2000);
     } catch (error) {
       toast.error(error.response?.data?.message || "An error occurred");
     } finally {
@@ -33,55 +33,57 @@ const LogIn = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
+    <div className="flex min-h-screen bg-gray-200">
       <div className="flex flex-col md:flex-row items-center justify-center w-full max-w-4xl mx-auto my-8 bg-white shadow-lg rounded-lg overflow-hidden">
-        <div className="flex-1 p-6 md:w-1/2">
-          <h1 className="text-2xl font-bold mb-4">Login</h1>
-          <p className="mb-4">Use your account to log in.</p>
+        {/* Form Section */}
+        <div className="flex-1 p-8 md:w-1/2 bg-gradient-to-r from-blue-500 to-teal-500 text-white">
+          <h1 className="text-3xl font-bold mb-6">Log In</h1>
+          <p className="mb-6">Please enter your credentials to access your account.</p>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div>
-              <label htmlFor="username" className="block text-gray-700 font-semibold mb-1">
+              <label htmlFor="username" className="block text-sm font-medium mb-1">
                 Username
               </label>
               <input
                 type="text"
                 id="username"
                 placeholder="Username"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                className="w-full px-4 py-2 border border-gray-300 rounded-md bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 {...register("username", { required: "Username is required" })}
               />
               {errors.username && <p className="text-red-500 text-sm">{errors.username.message}</p>}
             </div>
             <div>
-              <label htmlFor="password" className="block text-gray-700 font-semibold mb-1">
+              <label htmlFor="password" className="block text-sm font-medium mb-1">
                 Password
               </label>
               <input
                 type="password"
                 id="password"
                 placeholder="Password"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                className="w-full px-4 py-2 border border-gray-300 rounded-md bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 {...register("password", { required: "Password is required" })}
               />
               {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
             </div>
             <button
               type="submit"
-              className="w-full py-2 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 transition"
+              className={`w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition ${isSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}
               disabled={isSubmitting}
             >
-              {isSubmitting ? <Loader /> : "login"}
+              {isSubmitting ? <Loader /> : "Log In"}
             </button>
-            <p className="text-center text-gray-600 mt-4">
-              Don't have an account? <Link to="/signup" className="text-blue-500 font-semibold">Sign Up</Link>.
+            <p className="text-center text-gray-700 mt-4">
+              Don't have an account? <Link to="/signup" className="text-blue-500 font-semibold hover:underline">Sign Up</Link>.
             </p>
           </form>
         </div>
-        <div className="hidden md:flex flex-1 bg-blue-500 items-center justify-center p-6">
-          <div className="text-center text-white">
-            <h2 className="text-2xl font-bold mb-4">Hello, Friend!</h2>
-            <p className="mb-4">Enter your personal details to start your journey with us.</p>
-            <Link to="/signup" className="text-blue-200 underline">Login</Link>
+        {/* Image Section */}
+        <div className="hidden md:flex flex-1 bg-blue-600 items-center justify-center p-8 text-center text-white">
+          <div>
+            <h2 className="text-3xl font-bold mb-4">Welcome Back!</h2>
+            <p className="mb-4">Log in to continue where you left off.</p>
+            <Link to="/signup" className="text-blue-200 underline">Create an Account</Link>
           </div>
         </div>
       </div>
